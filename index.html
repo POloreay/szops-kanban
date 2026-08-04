@@ -273,6 +273,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .panel-card input:focus,.panel-card select:focus{outline:none;border-color:#6366f1;}
 .panel-close{float:right;border:none;background:#f1f5f9;width:32px;height:32px;border-radius:8px;font-size:16px;cursor:pointer;color:#64748b;}
 .panel-close:hover{background:#e2e8f0;}
+/* Password eye toggle */
+.pass-cell{display:flex;align-items:center;gap:6px;}
+.pass-eye{cursor:pointer;font-size:15px;user-select:none;opacity:.5;transition:opacity .2s;}
+.pass-eye:hover{opacity:1;}
+.pass-val{font-size:12px;color:#475569;font-family:monospace;letter-spacing:1px;}
 
 /* Header user area */
 .header-user{display:flex;align-items:center;gap:10px;margin-left:10px;}
@@ -309,7 +314,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       <button class="btn btn-primary btn-sm" onclick="addUser()">新增用户</button>
     </div>
     <table>
-      <thead><tr><th>用户名</th><th>角色</th><th>创建时间</th><th>操作</th></tr></thead>
+      <thead><tr><th>用户名</th><th>角色</th><th>密码</th><th>创建时间</th><th>操作</th></tr></thead>
       <tbody id="userTableBody"></tbody>
     </table>
   </div>
@@ -1710,9 +1715,27 @@ function renderUserTable(){
   tbody.innerHTML=users.map((u,i)=>`<tr>
     <td>${esc(u.username)}${u.role==='admin'?' <span style="font-size:10px;color:#94a3b8">(管理员)</span>':''}</td>
     <td><span class="tag ${u.role==='admin'?'tag-admin':'tag-user'}">${u.role==='admin'?'管理员':'普通账户'}</span></td>
+    <td><div class="pass-cell"><span class="pass-val" id="passVal_${i}">${'●'.repeat(Math.min(u.password?u.password.length:0,8))}</span><span class="pass-eye" id="passEye_${i}" onclick="toggleUserPass(${i})" title="点击显示/隐藏密码">👁</span></div></td>
     <td style="color:#94a3b8;font-size:12px">${u.createdAt?new Date(u.createdAt).toLocaleString('zh-CN'):'-'}</td>
     <td>${u.role==='admin'?`<button class="btn btn-sm btn-outline" onclick="editUserPass(${i})">改密码</button> <button class="btn btn-sm btn-outline" onclick="renameAdmin(${i})">改名</button>`:`<button class="btn btn-sm btn-outline" onclick="editUserPass(${i})">改密码</button> <button class="btn btn-sm btn-danger-outline" onclick="deleteUser(${i})">删除</button>`}</td>
   </tr>`).join('');
+}
+
+function toggleUserPass(idx){
+  const users=getUsers();
+  const u=users[idx];if(!u)return;
+  const valEl=document.getElementById('passVal_'+idx);
+  const eyeEl=document.getElementById('passEye_'+idx);
+  if(!valEl||!eyeEl)return;
+  if(valEl.dataset.visible==='1'){
+    valEl.textContent='●'.repeat(Math.min(u.password?u.password.length:0,8));
+    valEl.dataset.visible='0';
+    eyeEl.textContent='👁';
+  }else{
+    valEl.textContent=u.password||'';
+    valEl.dataset.visible='1';
+    eyeEl.textContent='🙈';
+  }
 }
 
 function addUser(){
