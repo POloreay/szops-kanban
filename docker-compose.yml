@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  kanban:
+    build: .
+    container_name: szops-kanban
+    ports:
+      - "8080:80"
+    restart: unless-stopped
