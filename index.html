@@ -18,6 +18,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 .btn{padding:8px 16px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
 .btn-primary{background:#3b82f6;color:#fff;}.btn-primary:hover{background:#2563eb;transform:translateY(-1px);}
+.btn-todo{background:#f97316;color:#fff;}.btn-todo:hover{background:#ea580c;transform:translateY(-1px);}
 .btn-ghost{background:rgba(255,255,255,.1);color:var(--header-text);}.btn-ghost:hover{background:rgba(255,255,255,.2);}
 .btn-success{background:#22c55e;color:#fff;}.btn-success:hover{background:#16a34a;}
 .btn-sm{padding:5px 12px;font-size:13px;}
@@ -285,9 +286,131 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .header-user .urole{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:700;}
 .header-logout{border:1px solid rgba(255,255,255,.3);background:none;color:var(--header-text);padding:4px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;}
 .header-logout:hover{background:rgba(255,255,255,.15);}
+
+/* Todo Module - left slide panel */
+.todo-module-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:498;backdrop-filter:blur(2px);}
+.todo-module-backdrop.show{display:block;}
+.todo-module-panel{position:fixed;top:0;left:-1320px;width:1300px;max-width:95vw;height:100vh;background:var(--bg);z-index:500;overflow-y:auto;box-shadow:4px 0 24px rgba(0,0,0,.15);transition:left .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
+.todo-module-panel.show{left:0;}
+.todo-module-header{background:linear-gradient(135deg,#5b8def,#7c6cf0);color:#fff;padding:24px 32px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 16px rgba(91,141,239,.2);}
+.todo-module-header h2{font-size:22px;font-weight:800;display:flex;align-items:center;gap:10px;letter-spacing:.5px;}
+.todo-module-header .back-btn{background:rgba(255,255,255,.2);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;}
+.todo-module-header .back-btn:hover{background:rgba(255,255,255,.35);transform:translateY(-1px);}
+.todo-module-stats{display:flex;gap:24px;padding:20px 32px;background:#fff;border-bottom:1px solid var(--border);}
+.todo-stat-card{background:#f8fafc;border-radius:12px;padding:16px 20px;flex:1;text-align:center;border:1.5px solid var(--border);}
+.todo-stat-card .num{font-size:28px;font-weight:800;line-height:1;}
+.todo-stat-card .lbl{font-size:12px;color:var(--text-muted);margin-top:6px;font-weight:600;}
+.todo-stat-card.overdue .num{color:#dc2626;}
+.todo-stat-card.urgent .num{color:#ea580c;}
+.todo-stat-card.normal .num{color:#65a30d;}
+.todo-stat-card.done .num{color:#3b82f6;}
+.todo-module-toolbar{padding:16px 32px;display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap;}
+.todo-module-toolbar .search-box{padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;width:220px;outline:none;transition:border-color .2s;}
+.todo-module-toolbar .search-box:focus{border-color:#5b8def;}
+.todo-list-container{padding:20px 32px 40px;}
+.todo-card{background:#fff;border-radius:12px;padding:18px 22px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:5px solid #e2e8f0;transition:all .2s;position:relative;display:flex;align-items:flex-start;gap:16px;}
+.todo-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px);}
+/* 底色分级：不足1天淡红/3天内淡橙/5天内淡蓝/7天+淡绿 */
+.todo-card.bg-red{background:#fef2f2;border-left-color:#f87171;}
+.todo-card.bg-orange{background:#fff7ed;border-left-color:#fb923c;}
+.todo-card.bg-blue{background:#eff6ff;border-left-color:#60a5fa;}
+.todo-card.bg-green{background:#f0fdf4;border-left-color:#4ade80;}
+.todo-card.bg-default{background:#fff;border-left-color:#e2e8f0;}
+.todo-card-done{opacity:.55;text-decoration:line-through;}
+.todo-card-check{width:24px;height:24px;border-radius:50%;border:2.5px solid #cbd5e1;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:2px;}
+.todo-card-check:hover{border-color:#5b8def;background:rgba(91,141,239,.08);}
+.todo-card-check.checked{background:#22c55e;border-color:#22c55e;color:#fff;font-size:14px;}
+.todo-card-body{flex:1;min-width:0;}
+.todo-card-content{font-size:15px;font-weight:600;color:var(--text);line-height:1.5;word-break:break-word;}
+.todo-card-meta{display:flex;gap:16px;align-items:center;margin-top:8px;font-size:12px;color:var(--text-muted);flex-wrap:wrap;}
+.todo-card-meta .tag{display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border-radius:20px;font-weight:700;font-size:11px;}
+.tag-overdue{background:#fee2e2;color:#dc2626;}
+.tag-urgent{background:#ffedd5;color:#c2410c;}
+.tag-remind{background:#dbeafe;color:#1d4ed8;}
+.tag-ok{background:#dcfce7;color:#16a34a;}
+.todo-card-actions{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+.todo-card-actions button{width:30px;height:30px;border:none;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.todo-del-btn{background:#f1f5f9;color:#94a3b8;}.todo-del-btn:hover{background:#fef2f2;color:#dc2626;}
+.todo-empty{text-align:center;padding:60px 20px;color:#94a3b8;font-size:16px;}
+
+/* Beautiful Todo Create Modal */
+.todo-create-modal{max-width:520px!important;border-radius:20px!important;overflow:hidden;border:none!important;}
+.todo-create-modal .modal-header{background:linear-gradient(135deg,#5b8def,#7c6cf0);color:#fff;border:none;padding:22px 28px;}
+.todo-create-modal .modal-header h2{color:#fff;font-size:20px;font-weight:800;display:flex;align-items:center;gap:8px;}
+.todo-create-modal .modal-close{background:rgba(255,255,255,.2);color:#fff;border:none;}
+.todo-create-modal .modal-close:hover{background:rgba(255,255,255,.35);}
+.todo-create-modal .modal-body{padding:24px 28px;}
+.todo-create-modal .form-group label{font-size:14px;font-weight:700;color:#334155;margin-bottom:8px;}
+.todo-create-modal .form-group textarea,.todo-create-modal .form-group input{border:2px solid #e2e8f0;border-radius:12px;padding:12px 16px;font-size:15px;transition:all .2s;}
+.todo-create-modal .form-group textarea:focus,.todo-create-modal .form-group input:focus{border-color:#5b8def;box-shadow:0 0 0 4px rgba(91,141,239,.1);}
+.todo-create-modal .modal-footer{padding:16px 28px 20px;border-top:none;display:flex;justify-content:flex-end;gap:10px;}
+.todo-save-btn{background:linear-gradient(135deg,#5b8def,#7c6cf0)!important;color:#fff!important;border:none!important;padding:10px 28px!important;border-radius:10px!important;font-size:15px!important;font-weight:700!important;cursor:pointer;transition:all .2s!important;box-shadow:0 4px 12px rgba(91,141,239,.3)!important;}
+.todo-save-btn:hover{transform:translateY(-1px)!important;box-shadow:0 6px 16px rgba(91,141,239,.4)!important;}
+.todo-cancel-btn{background:#f1f5f9!important;color:#64748b!important;border:none!important;padding:10px 20px!important;border-radius:10px!important;font-size:15px!important;font-weight:700!important;cursor:pointer!important;}
+.todo-cancel-btn:hover{background:#e2e8f0!important;}
+
+/* Todo Reminder Redesign */
+.todo-reminder-box{background:rgba(255,255,255,0.6);border-radius:20px;padding:28px 32px;max-width:747px;width:90%;max-height:80vh;overflow:auto;box-shadow:0 8px 32px rgba(0,0,0,.18);position:relative;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+.todo-reminder-title{font-size:18px;font-weight:800;margin-bottom:20px;display:flex;align-items:center;gap:10px;color:#1e293b;}
+.todo-reminder-title .bell-icon{background:linear-gradient(135deg,#5b8def,#7c6cf0);color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;animation:bellShake 2s infinite;}
+@keyframes bellShake{0%,100%{transform:rotate(0);}5%,15%{transform:rotate(12deg);}10%,20%{transform:rotate(-12deg);}25%{transform:rotate(0);}}
+.todo-remind-item{border-radius:12px;padding:14px 18px;margin-bottom:10px;display:flex;align-items:center;gap:14px;transition:all .2s;border-left:4px solid transparent;}
+.todo-remind-item:hover{transform:translateX(2px);}
+.todo-remind-item.bg-red{background:#fef2f2;border-left-color:#ef4444;}
+.todo-remind-item.bg-orange{background:#fff7ed;border-left-color:#fb923c;}
+.todo-remind-item.bg-blue{background:#eff6ff;border-left-color:#60a5fa;}
+.todo-remind-item.bg-green{background:#f0fdf4;border-left-color:#4ade80;}
+.todo-remind-item.bg-default{background:#f8fafc;border-left-color:#e2e8f0;}
+.todo-remind-check{width:22px;height:22px;border-radius:50%;border:2.5px solid #cbd5e1;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;background:#fff;}
+.todo-remind-check:hover{border-color:#5b8def;}
+.todo-remind-body{flex:1;min-width:0;}
+.todo-remind-content{font-size:14px;font-weight:600;color:#1e293b;line-height:1.4;word-break:break-word;}
+.todo-remind-meta{display:flex;gap:12px;align-items:center;margin-top:6px;font-size:12px;color:#64748b;flex-wrap:wrap;}
+.todo-remind-remain{font-weight:800;font-size:13px;}
+.todo-remind-actions{flex-shrink:0;display:flex;gap:4px;}
+.todo-remind-actions button{width:28px;height:28px;border:none;border-radius:6px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.todo-remind-del{background:#f1f5f9;color:#94a3b8;}.todo-remind-del:hover{background:#fef2f2;color:#dc2626;}
+
+/* Left Edge Trigger for Todo Module (circle icon with list symbol) */
+.todo-edge-trigger{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:499;cursor:pointer;transition:all .35s cubic-bezier(.4,0,.2,1);opacity:0;pointer-events:none;}
+.todo-edge-trigger.show{opacity:1;pointer-events:auto;}
+.todo-edge-trigger:hover .todo-edge-icon{transform:scale(1.1);box-shadow:0 4px 16px rgba(0,0,0,.2);}
+.todo-edge-icon{width:40px;height:40px;border-radius:50%;background:#fff;border:1.5px solid #e2e8f0;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.1);transition:all .25s;position:relative;right:0;}
+.todo-edge-icon::before{content:'☰';font-size:18px;color:#475569;font-weight:700;line-height:1;}
+.todo-edge-trigger.hide{opacity:0!important;pointer-events:none!important;}
+
+/* Custom calendar component for todo module */
+.todo-calendar-wrap{display:flex;align-items:center;gap:10px;flex-shrink:0;position:relative;}
+.todo-cal-btn{padding:6px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--text);font-weight:600;transition:all .2s;outline:none;}
+.todo-cal-btn:hover{border-color:#5b8def;color:#5b8def;}
+.todo-cal-btn.active{border-color:#5b8def;background:#eff6ff;color:#1e40af;}
+.todo-cal-dropdown{position:absolute;top:42px;right:0;background:#fff;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.15);padding:16px;z-index:600;min-width:280px;display:none;}
+.todo-cal-dropdown.show{display:block;}
+.todo-cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.todo-cal-header button{border:none;background:#f1f5f9;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:16px;color:#475569;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.todo-cal-header button:hover{background:#e2e8f0;}
+.todo-cal-header span{font-size:15px;font-weight:700;color:#1e293b;}
+.todo-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;}
+.todo-cal-grid .cal-wk{font-size:11px;color:#94a3b8;font-weight:700;padding:4px 0;}
+.todo-cal-grid .cal-day{font-size:13px;padding:6px 0;border-radius:8px;cursor:pointer;position:relative;transition:all .15s;color:#334155;font-weight:500;}
+.todo-cal-grid .cal-day:hover{background:#f1f5f9;}
+.todo-cal-grid .cal-day.today{font-weight:800;color:#5b8def;}
+.todo-cal-grid .cal-day.selected{background:#5b8def;color:#fff;font-weight:700;}
+.todo-cal-grid .cal-day.selected:hover{background:#4b7de0;}
+.todo-cal-grid .cal-day.other-month{color:#cbd5e1;}
+.todo-cal-grid .cal-day .dot{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:#ef4444;}
+.todo-cal-grid .cal-day.selected .dot{background:#fff;}
+.todo-cal-clear{margin-top:10px;text-align:center;}
+.todo-cal-clear button{border:none;background:none;color:#3b82f6;font-size:12px;font-weight:700;cursor:pointer;}
+.todo-cal-clear button:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
+
+<!-- Left edge trigger for Todo Module -->
+<div class="todo-edge-trigger" id="todoEdgeTrigger" onclick="openTodoModule()">
+  <div class="todo-edge-icon"></div>
+</div>
 
 <!-- Login modal (centered, not full screen) -->
 <div class="login-overlay" id="loginOverlay">
@@ -400,11 +523,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       <div class="form-row" id="subRowSimple">
         <div class="form-group"><label>子状态</label><select id="taskSubStatus"></select></div>
       </div>
-      <!-- 实施环节：交付子状态 + 财务子状态 -->
+      <!-- 实施环节：交付子状态 + 财务子状态（支持自定义输入） -->
       <div id="subRowImpl" style="display:none">
         <div class="form-row">
-          <div class="form-group"><label>交付子状态</label><select id="taskImplSub1"></select></div>
-          <div class="form-group"><label>财务子状态</label><select id="taskImplSub2"></select></div>
+          <div class="form-group"><label>交付子状态</label><input type="text" id="taskImplSub1" list="implSub1List" placeholder="选择或输入自定义状态" autocomplete="off"><datalist id="implSub1List"></datalist></div>
+          <div class="form-group"><label>财务子状态</label><input type="text" id="taskImplSub2" list="implSub2List" placeholder="选择或输入自定义状态" autocomplete="off"><datalist id="implSub2List"></datalist></div>
         </div>
       </div>
       <div class="form-group"><div class="checkbox-group"><input type="checkbox" id="taskNeedDecision"><label for="taskNeedDecision" style="margin:0;cursor:pointer">此任务需要决策</label></div></div>
@@ -412,6 +535,59 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
     <div class="modal-footer">
       <button class="btn btn-sm btn-outline" onclick="closeTaskModal()">取消</button>
       <button class="btn btn-primary btn-sm" onclick="saveTask()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Todo Task Module (left slide panel) -->
+<div class="todo-module-backdrop" id="todoModuleBackdrop" onclick="closeTodoModule()"></div>
+<div class="todo-module-panel" id="todoModule">
+  <div class="todo-module-header">
+    <h2>📋 待办任务</h2>
+    <button class="back-btn" onclick="closeTodoModule()">✕ 关闭</button>
+  </div>
+  <div class="todo-module-stats" id="todoModuleStats"></div>
+  <div class="todo-module-toolbar">
+    <input type="text" class="search-box" id="todoSearchInput" placeholder="搜索待办内容..." oninput="renderTodoModule()">
+    <div class="todo-calendar-wrap">
+      <button class="todo-cal-btn" id="todoCalBtn" onclick="toggleTodoCal()">📅 按日期查看</button>
+      <div class="todo-cal-dropdown" id="todoCalDropdown">
+        <div class="todo-cal-header">
+          <button onclick="todoCalPrev()">‹</button>
+          <span id="todoCalTitle">2026年8月</span>
+          <button onclick="todoCalNext()">›</button>
+        </div>
+        <div class="todo-cal-grid" id="todoCalGrid"></div>
+        <div class="todo-cal-clear"><button onclick="todoCalClear()">清除日期筛选</button></div>
+      </div>
+    </div>
+    <button class="btn btn-todo" style="padding:10px 24px;font-size:15px;font-weight:700;border-radius:10px;box-shadow:0 4px 12px rgba(91,141,239,.3);background:linear-gradient(135deg,#5b8def,#7c6cf0);border:none;color:#fff;cursor:pointer;" onclick="openTodoModal()">+ 新建待办</button>
+  </div>
+  <div class="todo-list-container" id="todoModuleList"></div>
+</div>
+
+<!-- Todo create modal (beautified) -->
+<div class="modal-overlay" id="todoCreateModal">
+  <div class="modal todo-create-modal" style="max-width:520px">
+    <div class="modal-header"><h2>✏️ 新建待办</h2><button class="modal-close" onclick="closeTodoCreateModal()">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>任务内容 <span class="required">*</span></label><textarea id="todoContent" placeholder="请输入待办内容" maxlength="200" rows="3"></textarea></div>
+      <div class="form-group"><label>截止日期 <span class="required">*</span></label><div style="display:flex;align-items:center;gap:10px;"><input type="date" id="todoDeadline" style="flex:1;"><input type="time" id="todoTime" style="width:auto;flex-shrink:0;"></div></div>
+    </div>
+    <div class="modal-footer">
+      <button class="todo-cancel-btn" onclick="closeTodoCreateModal()">取消</button>
+      <button class="todo-save-btn" onclick="saveTodo()">保存待办</button>
+    </div>
+  </div>
+</div>
+
+<!-- Todo reminder modal (redesigned) -->
+<div class="modal-overlay" id="todoReminderModal" style="z-index:300">
+  <div class="todo-reminder-box">
+    <div class="todo-reminder-title"><span class="bell-icon">🔔</span> 工作待办提醒</div>
+    <div id="todoReminderList"></div>
+    <div style="margin-top:18px;text-align:right;">
+      <button class="btn btn-sm btn-outline" onclick="closeTodoReminder()">关闭</button>
     </div>
   </div>
 </div>
@@ -646,9 +822,18 @@ function updateSubOptions(){
   document.getElementById('subRowSimple').style.display = isImpl?'none':'';
   document.getElementById('subRowImpl').style.display = isImpl?'':'none';
   if(isImpl){
-    document.getElementById('taskImplSub1').innerHTML = IMPL_SUBS_PATH1.map(s=>`<option value="${s}">${s}</option>`).join('');
-    document.getElementById('taskImplSub2').innerHTML = IMPL_SUBS_PATH2.map(s=>`<option value="${s}">${s}</option>`).join('');
+    const dl1=document.getElementById('implSub1List');
+    const dl2=document.getElementById('implSub2List');
+    const inp1=document.getElementById('taskImplSub1');
+    const inp2=document.getElementById('taskImplSub2');
+    dl1.innerHTML=IMPL_SUBS_PATH1.map(s=>`<option value="${s}">`).join('');
+    dl2.innerHTML=IMPL_SUBS_PATH2.map(s=>`<option value="${s}">`).join('');
+    if(!inp1.value && IMPL_SUBS_PATH1.length) inp1.value=IMPL_SUBS_PATH1[0];
+    if(!inp2.value && IMPL_SUBS_PATH2.length) inp2.value=IMPL_SUBS_PATH2[0];
   } else {
+    // Clear impl sub inputs when switching away from impl
+    document.getElementById('taskImplSub1').value='';
+    document.getElementById('taskImplSub2').value='';
     const subs = STATUS_MAP[status]?.subs||[];
     document.getElementById('taskSubStatus').innerHTML = subs.map(s=>`<option value="${s}">${s}</option>`).join('');
   }
@@ -1656,6 +1841,8 @@ function doLogin(){
   updateHeaderUser();
   addLog('登录','用户 '+username+' 登录系统');
   showToast('欢迎回来，'+username);
+  // Show todo reminder after login
+  loadTodos();showTodoReminder();updateTodoEdgeTrigger();
   // Resume pending action if any
   if(_pendingAction){const fn=_pendingAction;_pendingAction=null;fn();}
 }
@@ -1665,6 +1852,7 @@ function doLogout(){
   currentUser=null;
   localStorage.removeItem(SESSION_KEY);
   updateHeaderUser();
+  updateTodoEdgeTrigger();
   showToast('已退出登录');
 }
 
@@ -1865,18 +2053,421 @@ loadSettings();applySettingsToUI();loadTasks();renderBoard();
   await Promise.all([cloudLoadTasks(), cloudLoadSettings(), cloudLoadUsers(), cloudLoadLogs()]);
   applySettingsToUI();
   renderBoard();
-  // Show cloud sync status
-  showToast('云端数据已同步');
+  loadTodos();
+  showTodoReminder();
+  updateTodoEdgeTrigger();
 })();
 document.getElementById('taskModal').addEventListener('click',e=>{if(e.target.id==='taskModal')closeTaskModal();});
 document.getElementById('importModal').addEventListener('click',e=>{if(e.target.id==='importModal')closeImportModal();});
 document.getElementById('settingsOverlay').addEventListener('click',e=>{if(e.target.id==='settingsOverlay')closeSettings();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeTaskModal();closeImportModal();closeDetail();closeSettings();document.getElementById('msDialogOverlay').classList.remove('show');closeUserPanel();closeLogPanel();closeLoginModal();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeTaskModal();closeImportModal();closeDetail();closeSettings();document.getElementById('msDialogOverlay').classList.remove('show');closeUserPanel();closeLogPanel();closeLoginModal();closeTodoCreateModal();closeTodoReminder();closeTodoModule();}});
 // Auto-refresh cloud data every 60 seconds
 setInterval(async()=>{
   await cloudLoadTasks();
   renderBoard();
 },60000);
+
+// ========== Todo Module ==========
+const TODO_KEY = 'szops_todos_v2';
+let todos = [];
+
+function loadTodos(){
+  try{todos=JSON.parse(localStorage.getItem(TODO_KEY)||'[]');}catch(e){todos=[];}
+}
+function saveTodos(){
+  localStorage.setItem(TODO_KEY,JSON.stringify(todos));
+  cloudSave('todos',todos);
+}
+async function cloudLoadTodos(){
+  const data = await cloudFetch('todos');
+  if(data!==null&&data!==undefined&&Array.isArray(data)){
+    todos=data;
+    localStorage.setItem(TODO_KEY,JSON.stringify(todos));
+  }
+}
+function getMyTodos(){
+  if(!currentUser)return [];
+  return todos.filter(t=>t.owner===currentUser.username&&!t.done);
+}
+function getAllMyTodos(){
+  if(!currentUser)return [];
+  return todos.filter(t=>t.owner===currentUser.username);
+}
+function sortTodosByUrgency(list){
+  return list.slice().sort((a,b)=>{
+    const da=a.deadline+(a.time?'T'+a.time:'');
+    const db=b.deadline+(b.time?'T'+b.time:'');
+    return new Date(da)-new Date(db);
+  });
+}
+function sortTodosByCreated(list){
+  return list.slice().sort((a,b)=>{
+    return new Date(b.createdAt||0)-new Date(a.createdAt||0);
+  });
+}
+
+// Open Todo module (left slide panel)
+function openTodoModule(){
+  if(!currentUser){showLoginModal();return;}
+  loadTodos();
+  renderTodoModule();
+  document.getElementById('todoModule').classList.add('show');
+  document.getElementById('todoModuleBackdrop').classList.add('show');
+  document.getElementById('todoEdgeTrigger').classList.add('hide');
+}
+function closeTodoModule(){
+  document.getElementById('todoModule').classList.remove('show');
+  document.getElementById('todoModuleBackdrop').classList.remove('show');
+  document.getElementById('todoEdgeTrigger').classList.remove('hide');
+  closeTodoCal();
+}
+
+// Show/hide left edge trigger based on login
+function updateTodoEdgeTrigger(){
+  const el=document.getElementById('todoEdgeTrigger');
+  if(currentUser&&todos.filter(t=>t.owner===currentUser.username).length>0){
+    el.classList.add('show');
+  }else{
+    el.classList.remove('show');
+  }
+}
+
+// Render todo module page
+let _todoCalYear, _todoCalMonth, _todoCalSelected='';
+function initTodoCal(){
+  const now=new Date();_todoCalYear=now.getFullYear();_todoCalMonth=now.getMonth();_todoCalSelected='';
+}
+initTodoCal();
+
+function toggleTodoCal(){
+  const dd=document.getElementById('todoCalDropdown');
+  dd.classList.toggle('show');
+  if(dd.classList.contains('show'))renderTodoCal();
+}
+function closeTodoCal(){
+  document.getElementById('todoCalDropdown').classList.remove('show');
+}
+function todoCalPrev(){_todoCalMonth--;if(_todoCalMonth<0){_todoCalMonth=11;_todoCalYear--;}renderTodoCal();}
+function todoCalNext(){_todoCalMonth++;if(_todoCalMonth>11){_todoCalMonth=0;_todoCalYear++;}renderTodoCal();}
+function todoCalClear(){_todoCalSelected='';renderTodoModule();renderTodoCal();closeTodoCal();}
+function todoCalSelectDay(ymd){_todoCalSelected=ymd;renderTodoModule();renderTodoCal();closeTodoCal();}
+
+// Click outside to close calendar dropdown
+document.addEventListener('click',e=>{
+  const wrap=document.querySelector('.todo-calendar-wrap');
+  if(wrap&&!wrap.contains(e.target))closeTodoCal();
+});
+
+function renderTodoCal(){
+  document.getElementById('todoCalTitle').textContent=`${_todoCalYear}年${_todoCalMonth+1}月`;
+  const grid=document.getElementById('todoCalGrid');
+  // Collect dates that have todos
+  const allList=getAllMyTodos();
+  const todoDates=new Set();
+  allList.forEach(t=>{if(t.deadline)todoDates.add(t.deadline);});
+  // Build calendar grid
+  const today=new Date();const todayStr=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+  const firstDay=new Date(_todoCalYear,_todoCalMonth,1);
+  const startWeekday=firstDay.getDay(); // 0=Sun
+  const daysInMonth=new Date(_todoCalYear,_todoCalMonth+1,0).getDate();
+  const daysInPrev=new Date(_todoCalYear,_todoCalMonth,0).getDate();
+  let html='';
+  // Weekday headers
+  const wkNames=['日','一','二','三','四','五','六'];
+  wkNames.forEach(w=>{html+=`<div class="cal-wk">${w}</div>`;});
+  // Previous month trailing days
+  for(let i=startWeekday-1;i>=0;i--){
+    const d=daysInPrev-i;
+    html+=`<div class="cal-day other-month">${d}</div>`;
+  }
+  // Current month days
+  for(let d=1;d<=daysInMonth;d++){
+    const ymd=`${_todoCalYear}-${String(_todoCalMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=ymd===todayStr;
+    const isSel=ymd===_todoCalSelected;
+    const hasTodo=todoDates.has(ymd);
+    let cls='cal-day';
+    if(isToday)cls+=' today';
+    if(isSel)cls+=' selected';
+    html+=`<div class="${cls}" onclick="todoCalSelectDay('${ymd}')">${d}${hasTodo?'<span class="dot"></span>':''}</div>`;
+  }
+  // Fill remaining to complete grid row
+  const totalCells=startWeekday+daysInMonth;
+  const remaining=(7-totalCells%7)%7;
+  for(let i=1;i<=remaining;i++){
+    html+=`<div class="cal-day other-month">${i}</div>`;
+  }
+  grid.innerHTML=html;
+  // Update button active state
+  const btn=document.getElementById('todoCalBtn');
+  if(_todoCalSelected)btn.classList.add('active');else btn.classList.remove('active');
+}
+
+function renderTodoModule(){
+  const allList=getAllMyTodos();
+  const searchVal=(document.getElementById('todoSearchInput')?.value||'').trim().toLowerCase();
+  const calendarVal=_todoCalSelected||'';
+
+  let filtered=allList;
+  if(searchVal)filtered=filtered.filter(t=>t.content.toLowerCase().includes(searchVal));
+  if(calendarVal)filtered=filtered.filter(t=>t.deadline===calendarVal);
+
+  const byCreated=sortTodosByCreated(filtered);
+  const undone=byCreated.filter(t=>!t.done);
+  const done=byCreated.filter(t=>t.done);
+
+  const allUndone=allList.filter(t=>!t.done);
+  const overdueCount=allUndone.filter(t=>getTodoHoursLeft(t)<0).length;
+  const urgentCount=allUndone.filter(t=>{const h=getTodoHoursLeft(t);return h>=0&&h<72;}).length;
+  const normalCount=allUndone.filter(t=>getTodoHoursLeft(t)>=72).length;
+  const doneCount=allList.filter(t=>t.done).length;
+
+  const statsEl=document.getElementById('todoModuleStats');
+  statsEl.innerHTML=`
+    <div class="todo-stat-card overdue"><div class="num">${overdueCount}</div><div class="lbl">已逾期</div></div>
+    <div class="todo-stat-card urgent"><div class="num">${urgentCount}</div><div class="lbl">3天内到期</div></div>
+    <div class="todo-stat-card normal"><div class="num">${normalCount}</div><div class="lbl">正常</div></div>
+    <div class="todo-stat-card done"><div class="num">${doneCount}</div><div class="lbl">已完成</div></div>
+  `;
+
+  const listEl=document.getElementById('todoModuleList');
+  if(byCreated.length===0){
+    if(calendarVal){
+      listEl.innerHTML=`<div class="todo-empty">${calendarVal} 暂无待办记录</div>`;
+    }else{
+      listEl.innerHTML='<div class="todo-empty">暂无待办任务，点击上方按钮创建 ✨</div>';
+    }
+    return;
+  }
+
+  let html='';
+  if(calendarVal){
+    html+=`<div style="margin-bottom:16px;padding:10px 16px;background:#eff6ff;border-radius:10px;font-size:14px;font-weight:600;color:#1e40af;">📅 查看 ${calendarVal} 的待办任务</div>`;
+  }
+  if(undone.length>0){
+    undone.forEach(t=>{html+=renderTodoCard(t);});
+  }
+  if(done.length>0){
+    html+=`<div style="margin:20px 0 12px;font-size:14px;font-weight:700;color:#94a3b8;border-bottom:1px solid #e2e8f0;padding-bottom:8px;">已完成 (${done.length})</div>`;
+    done.forEach(t=>{html+=renderTodoCard(t);});
+  }
+  listEl.innerHTML=html;
+}
+
+function renderTodoCard(t){
+  const hrs=getTodoHoursLeft(t);
+  const bgCls=getTodoBgClass(hrs);
+  const checked=t.done?'checked':'';
+  const doneCls=t.done?'todo-card-done':'';
+  const remainHtml=t.done?'<span class="tag tag-ok">已完成</span>':getTodoRemainHtml(hrs);
+  return `
+    <div class="todo-card ${bgCls} ${doneCls}">
+      <div class="todo-card-check ${checked}" onclick="toggleTodoDone('${t.id}')">${t.done?'✓':''}</div>
+      <div class="todo-card-body">
+        <div class="todo-card-content">${esc(t.content)}</div>
+        <div class="todo-card-meta">
+          <span>📅 ${fmtTodoDeadline(t)}</span>
+          ${remainHtml}
+        </div>
+      </div>
+      <div class="todo-card-actions">
+        <button style="width:30px;height:30px;border:none;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s;background:#f1f5f9;color:#64748b;" onclick="editTodo('${t.id}')" title="编辑">✏</button>
+        <button class="todo-del-btn" onclick="deleteTodoFromModule('${t.id}')" title="删除">🗑</button>
+      </div>
+    </div>`;
+}
+
+function toggleTodoDone(id){
+  const t=todos.find(x=>x.id===id);
+  if(t){t.done=!t.done;saveTodos();renderTodoModule();if(!t.done)showToast('待办已恢复');else showToast('待办已完成');}
+}
+function deleteTodoFromModule(id){
+  todos=todos.filter(x=>x.id!==id);
+  saveTodos();
+  renderTodoModule();
+  showToast('待办已删除');
+}
+
+// Open Todo create/edit modal
+let _editingTodoId=null; // null=new, string=edit id
+function openTodoModal(editId){
+  if(!currentUser){showLoginModal();return;}
+  _editingTodoId=editId||null;
+  if(_editingTodoId){
+    // Edit mode: populate form
+    const t=todos.find(x=>x.id===_editingTodoId);
+    if(!t){showToast('待办不存在',true);return;}
+    document.getElementById('todoContent').value=t.content||'';
+    document.getElementById('todoDeadline').value=t.deadline||'';
+    document.getElementById('todoTime').value=t.time||'';
+    document.querySelector('#todoCreateModal .modal-header h2').textContent='✏️ 编辑待办';
+    document.querySelector('#todoCreateModal .todo-save-btn').textContent='保存修改';
+  }else{
+    // New mode
+    document.getElementById('todoContent').value='';
+    document.getElementById('todoDeadline').value='';
+    document.getElementById('todoTime').value='';
+    document.querySelector('#todoCreateModal .modal-header h2').textContent='✏️ 新建待办';
+    document.querySelector('#todoCreateModal .todo-save-btn').textContent='保存待办';
+  }
+  document.getElementById('todoCreateModal').classList.add('show');
+}
+function closeTodoCreateModal(){
+  document.getElementById('todoCreateModal').classList.remove('show');
+  _editingTodoId=null;
+}
+function saveTodo(){
+  const content=document.getElementById('todoContent').value.trim();
+  const deadline=document.getElementById('todoDeadline').value;
+  const time=document.getElementById('todoTime').value;
+  if(!content){showToast('请输入待办内容',true);return;}
+  if(!deadline){showToast('请选择截止日期',true);return;}
+  if(_editingTodoId){
+    // Edit existing
+    const t=todos.find(x=>x.id===_editingTodoId);
+    if(t){t.content=content;t.deadline=deadline;t.time=time;saveTodos();addLog('编辑待办','编辑待办：'+content.substring(0,20));}
+    showToast('待办已更新');
+  }else{
+    // New
+    todos.push({id:uid(),content,deadline,time,owner:currentUser.username,done:false,createdAt:new Date().toISOString()});
+    saveTodos();
+    addLog('新建待办','新建待办：'+content.substring(0,20));
+    showToast('待办已创建');
+  }
+  closeTodoCreateModal();
+  // Refresh module if open
+  if(document.getElementById('todoModule').classList.contains('show')){
+    renderTodoModule();
+  }
+  // Refresh reminder if open
+  if(document.getElementById('todoReminderModal').classList.contains('show')){
+    renderTodoReminder();
+  }
+}
+// Shortcut to call edit from reminder popup
+function editTodo(id){openTodoModal(id);}
+
+// Calculate hours left (precise)
+function getTodoHoursLeft(t){
+  const ds=t.deadline+(t.time?'T'+t.time:'T23:59');
+  const d=new Date(ds);
+  if(isNaN(d.getTime()))return 9999;
+  return (d-new Date())/3600000;
+}
+
+// Background class by hours left: <1d red / <3d orange / <5d blue / >=7d green
+function getTodoBgClass(hrs){
+  if(hrs<0)return 'bg-red';       // 已逾期 → 淡红
+  if(hrs<24)return 'bg-red';      // 不足1天 → 淡红
+  if(hrs<72)return 'bg-orange';   // 3天内 → 淡橙
+  if(hrs<120)return 'bg-blue';    // 5天内 → 淡蓝
+  return 'bg-green';              // 7天及以上 → 淡绿
+}
+
+// Remain time HTML (precise to hours): <1d red / <3d orange / <5d blue / >=7d green
+function getTodoRemainHtml(hrs){
+  if(hrs===9999)return '<span class="tag" style="background:#f1f5f9;color:#94a3b8;">未知</span>';
+  if(hrs<0){
+    const ad=Math.ceil(Math.abs(hrs)/24);
+    return `<span class="tag tag-overdue">已逾期 ${ad} 天</span>`;
+  }
+  if(hrs<24){
+    const h=Math.max(1,Math.round(hrs));
+    return `<span class="tag tag-overdue">剩 ${h} 小时</span>`;
+  }
+  const days=Math.floor(hrs/24);
+  const remH=Math.round(hrs-days*24);
+  const suffix=remH>0?remH+'小时':'';
+  if(days<3){
+    return `<span class="tag tag-urgent">剩 ${days}天${suffix}</span>`;
+  }
+  if(days<5){
+    return `<span class="tag tag-remind">剩 ${days}天${suffix}</span>`;
+  }
+  return `<span class="tag tag-ok">剩 ${days}天${suffix}</span>`;
+}
+
+// Format deadline display
+function fmtTodoDeadline(t){
+  if(!t.deadline)return '-';
+  const ds=t.deadline+(t.time?'T'+t.time:'');
+  const d=new Date(ds);
+  if(isNaN(d.getTime()))return '-';
+  const week=['周日','周一','周二','周三','周四','周五','周六'][d.getDay()];
+  const y=d.getFullYear();
+  const mo=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  const hh=t.time?String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'):'';
+  let dateStr=`${y}/${mo}/${day}`;
+  if(hh)dateStr+=` ${hh}`;
+  return `<span style="font-weight:600;color:#334155;">${dateStr}</span> <span style="color:#94a3b8;font-size:12px;">${week}</span>`;
+}
+
+// ====== Todo Reminder (homepage popup, redesigned) ======
+function renderTodoReminder(){
+  const list=getMyTodos();
+  const sorted=sortTodosByUrgency(list);
+  const el=document.getElementById('todoReminderList');
+  if(sorted.length===0){
+    el.innerHTML='<div style="text-align:center;color:#94a3b8;padding:24px 0;font-size:14px;">暂无待办事项 ✅</div>';
+    return;
+  }
+  let html='';
+  sorted.forEach(t=>{
+    const hrs=getTodoHoursLeft(t);
+    const bgCls=getTodoBgClass(hrs);
+    const remainHtml=getTodoRemainHtml(hrs);
+    html+=`
+      <div class="todo-remind-item ${bgCls}">
+        <div class="todo-remind-check" onclick="completeTodo('${t.id}')" title="标记完成"></div>
+        <div class="todo-remind-body">
+          <div class="todo-remind-content">${esc(t.content)}</div>
+          <div class="todo-remind-meta">
+            <span>📅 ${fmtTodoDeadline(t)}</span>
+            <span class="todo-remind-remain">${remainHtml}</span>
+          </div>
+        </div>
+        <div class="todo-remind-actions">
+          <button style="width:28px;height:28px;border:none;border-radius:6px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .15s;background:#f1f5f9;color:#64748b;" onclick="editTodoFromReminder('${t.id}')" title="编辑">✏</button>
+          <button class="todo-remind-del" onclick="deleteTodo('${t.id}')" title="删除">🗑</button>
+        </div>
+      </div>`;
+  });
+  el.innerHTML=html;
+}
+
+function completeTodo(id){
+  const t=todos.find(x=>x.id===id);
+  if(t){t.done=true;saveTodos();renderTodoReminder();if(document.getElementById('todoModule').classList.contains('show'))renderTodoModule();showToast('待办已完成');}
+}
+function deleteTodo(id){
+  todos=todos.filter(x=>x.id!==id);
+  saveTodos();
+  renderTodoReminder();
+  if(document.getElementById('todoModule').classList.contains('show'))renderTodoModule();
+}
+function editTodoFromReminder(id){
+  closeTodoReminder();
+  setTimeout(()=>editTodo(id),200);
+}
+
+function showTodoReminder(){
+  if(!currentUser)return;
+  const list=getMyTodos();
+  if(list.length===0)return;
+  loadTodos();
+  renderTodoReminder();
+  document.getElementById('todoReminderModal').classList.add('show');
+}
+function closeTodoReminder(){
+  document.getElementById('todoReminderModal').classList.remove('show');
+}
+
+// Show todos on page load and when returning to the page
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'){loadTodos();showTodoReminder();updateTodoEdgeTrigger();}
+});
+window.addEventListener('focus',()=>{loadTodos();showTodoReminder();updateTodoEdgeTrigger();});
 </script>
 </body>
 </html>
