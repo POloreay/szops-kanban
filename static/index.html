@@ -2122,10 +2122,10 @@ function closeTodoModule(){
   closeTodoCal();
 }
 
-// Show/hide left edge trigger based on login
+// Show/hide left edge trigger based on login (always show when logged in, so user can create todos anytime)
 function updateTodoEdgeTrigger(){
   const el=document.getElementById('todoEdgeTrigger');
-  if(currentUser&&todos.filter(t=>t.owner===currentUser.username).length>0){
+  if(currentUser){
     el.classList.add('show');
   }else{
     el.classList.remove('show');
