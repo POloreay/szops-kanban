@@ -670,12 +670,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 const STORAGE_KEY = 'szops_kanban_v2';
 // Auto-clean legacy localStorage keys from older versions
 ['szops_kanban','szops_kanban_v1'].forEach(k=>{if(localStorage.getItem(k)){localStorage.removeItem(k);console.log('Cleaned legacy key:',k)}});
-const IMPL_SUBS_PATH1 = ['项目交付','项目初验','项目终验'];
+const IMPL_SUBS_PATH1 = ['项目交付','项目初验','项目终验','初验不通过','终验不通过'];
 const IMPL_SUBS_PATH2 = ['财务开票','财务回款','财务列收'];
 const STATUS_MAP = {
   talk:{name:'前期环节',subs:['采购意向','采购需求','采购预告','商机录入','项目报名']},
-  bid:{name:'投标环节',subs:['标前评审','标书编写','标书审核','标书装订/上传','已中标，流程中','收入合同签订','落标归档']},
-  proc:{name:'采购环节',subs:['采购需求','采购方案','现场开标','采购结果','支出合同签订','流标']},
+  bid:{name:'投标环节',subs:['标前评审','标书编写','标书审核','标书装订/上传','已中标，流程中','收入合同签订','落标归档','归档结束']},
+  proc:{name:'采购环节',subs:['采购需求','采购方案','现场开标','采购结果','支出合同签订','流标','项目终止']},
   impl:{name:'实施环节'}
 };
 const STATUS_NAMES = {talk:'前期环节',bid:'投标环节',proc:'采购环节',impl:'实施环节'};
@@ -949,15 +949,22 @@ function renderCard(task,cardIdx){
   if(task.status==='impl'){
     const p1 = task.implSub1 || IMPL_SUBS_PATH1[0];
     const p2 = task.implSub2 || IMPL_SUBS_PATH2[0];
+    // 不通过子状态用红色样式醒目提示
+    const p1Style = p1.includes('不通过') ? 'background:#fee2e2;color:#991b1b' : '';
+    const p1Class = p1.includes('不通过') ? '' : 'badge-substatus-path1';
     subBadges = `<div style="display:flex;flex-direction:column;gap:4px;width:100%;">`;
-    subBadges += `<div class="impl-substatus-row"><span class="badge badge-substatus-path1">${esc(p1)}</span></div>`;
+    subBadges += `<div class="impl-substatus-row"><span class="badge ${p1Class}" ${p1Style?'style="'+p1Style+'"':''}>${esc(p1)}</span></div>`;
     subBadges += `<div class="impl-substatus-row"><span class="badge badge-substatus-path2">${esc(p2)}</span></div>`;
     subBadges += `</div>`;
   } else {
-    // Sub-status with color map for talk stage
+    // Sub-status color maps
     const talkColorMap = {'采购意向':'background:#ede9fe;color:#6d28d9','采购需求':'background:#dbeafe;color:#1d4ed8','采购预告':'background:#d1fae5;color:#047857','商机录入':'background:#fef3c7;color:#b45309','项目报名':'background:#fce7f3;color:#be185d'};
-    if(task.status==='talk' && talkColorMap[task.subStatus]){
-      subBadges = `<span class="badge" style="${talkColorMap[task.subStatus]}">${esc(task.subStatus||'未指定')}</span>`;
+    const bidColorMap = {'标前评审':'background:#fef3c7;color:#92400e','标书编写':'background:#fef9c3;color:#a16207','标书审核':'background:#fef9c3;color:#a16207','标书装订/上传':'background:#fef9c3;color:#a16207','已中标，流程中':'background:#d1fae5;color:#047857','收入合同签订':'background:#d1fae5;color:#047857','落标归档':'background:#fee2e2;color:#991b1b','归档结束':'background:#f1f5f9;color:#64748b'};
+    const procColorMap = {'采购需求':'background:#dbeafe;color:#1d4ed8','采购方案':'background:#dbeafe;color:#1d4ed8','现场开标':'background:#dbeafe;color:#1d4ed8','采购结果':'background:#d1fae5;color:#047857','支出合同签订':'background:#d1fae5;color:#047857','流标':'background:#fee2e2;color:#991b1b','项目终止':'background:#f1f5f9;color:#64748b'};
+    const colorMaps = {talk:talkColorMap,bid:bidColorMap,proc:procColorMap};
+    const colorMap = colorMaps[task.status];
+    if(colorMap && colorMap[task.subStatus]){
+      subBadges = `<span class="badge" style="${colorMap[task.subStatus]}">${esc(task.subStatus||'未指定')}</span>`;
     } else {
       subBadges = `<span class="badge badge-substatus">${esc(task.subStatus||'未指定')}</span>`;
     }
@@ -1188,11 +1195,16 @@ function renderDetailContent(task){
   // Sub status display
   let subDisplay = '';
   if(task.status==='impl'){
+    const is1 = (task.implSub1||IMPL_SUBS_PATH1[0]);
+    const is1Color = is1.includes('不通过') ? '#991b1b' : '#00838f';
     subDisplay = `
-      <div class="detail-info-item"><label>交付子状态</label><div class="value" style="color:#00838f;font-weight:700">${esc(task.implSub1||IMPL_SUBS_PATH1[0])}</div></div>
+      <div class="detail-info-item"><label>交付子状态</label><div class="value" style="color:${is1Color};font-weight:700">${esc(is1)}</div></div>
       <div class="detail-info-item"><label>财务子状态</label><div class="value" style="color:#7c3aed;font-weight:700">${esc(task.implSub2||IMPL_SUBS_PATH2[0])}</div></div>`;
   } else {
-    subDisplay = `<div class="detail-info-item"><label>子状态</label><div class="value" style="color:#4338ca;font-weight:700">${esc(task.subStatus||'-')}</div></div>`;
+    // 异常/终止子状态用红色，正常用蓝色
+    const abnormalSubs = ['落标归档','归档结束','流标','项目终止'];
+    const subColor = abnormalSubs.includes(task.subStatus) ? '#991b1b' : '#4338ca';
+    subDisplay = `<div class="detail-info-item"><label>子状态</label><div class="value" style="color:${subColor};font-weight:700">${esc(task.subStatus||'-')}</div></div>`;
   }
 
   // Budget
@@ -1554,7 +1566,7 @@ function handleExcelUpload(event){
           const statusText = String(mapped['状态']||'前期环节').trim();
           const status = STATUS_KEYS[statusText]||'talk';
           let subStatus = String(mapped['子状态']||'').trim();
-          if(!subStatus){const defSubs=STATUS_MAP[status]?.subs||[];subStatus=defSubs[0]||'意向发掘';}
+          if(!subStatus){const defSubs=STATUS_MAP[status]?.subs||[];subStatus=defSubs[0]||STATUS_MAP.talk.subs[0];}
           const decisionText = String(mapped['需要决策']||'否').trim();
           const needDecision = ['是','y','yes','true','1'].includes(decisionText.toLowerCase());
 
@@ -1574,7 +1586,7 @@ function handleExcelUpload(event){
           const pOwner=String(mapped['创建人']||'').trim();
           let task=tasks.find(t=>t.projectInfo?.projectId===pid);
           if(!task){
-            task={id:uid(),title:pname,desc:'',owner:pOwner,priority:'medium',deadline:new Date().toISOString().split('T')[0],status:'talk',subStatus:'意向发掘',implSub1:'',implSub2:'',needDecision:false,projectInfo:{},milestones:[],collections:[],projectAmt:'',createdAt:new Date().toISOString()};
+            task={id:uid(),title:pname,desc:'',owner:pOwner,priority:'medium',deadline:new Date().toISOString().split('T')[0],status:'talk',subStatus:STATUS_MAP.talk.subs[0],implSub1:'',implSub2:'',needDecision:false,projectInfo:{},milestones:[],collections:[],projectAmt:'',createdAt:new Date().toISOString()};
 
             tasks.push(task);
           }
