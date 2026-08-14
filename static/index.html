@@ -403,9 +403,126 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .todo-cal-clear{margin-top:10px;text-align:center;}
 .todo-cal-clear button{border:none;background:none;color:#3b82f6;font-size:12px;font-weight:700;cursor:pointer;}
 .todo-cal-clear button:hover{text-decoration:underline;}
+
+/* ========== Dashboard ========== */
+.dash-view{display:none;}
+.dash-view.active{display:block;}
+.kanban-view{display:none;}
+.kanban-view.active{display:block;}
+
+.dash-header{background:linear-gradient(135deg,#0c1631,#0f1d3d);color:#f8fafc;padding:20px 32px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(0,0,0,.3);position:sticky;top:0;z-index:100;}
+.dash-header h1{font-size:22px;font-weight:800;display:flex;align-items:center;gap:12px;letter-spacing:1px;}
+.dash-header h1 .logo{width:36px;height:36px;background:linear-gradient(135deg,#38bdf8,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;transition:all .2s;}
+.dash-header h1 .logo:hover{transform:scale(1.1);}
+.dash-header .dash-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.dash-header .dash-user{display:flex;align-items:center;gap:10px;margin-left:12px;}
+.dash-header .dash-user .uname{font-size:13px;font-weight:600;color:#e2e8f0;}
+.dash-btn{padding:9px 20px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+.dash-btn-primary{background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#fff;box-shadow:0 2px 12px rgba(56,189,248,.4);}
+.dash-btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(56,189,248,.5);}
+.dash-btn-ghost{background:rgba(255,255,255,.1);color:#e2e8f0;}
+.dash-btn-ghost:hover{background:rgba(255,255,255,.2);}
+
+.dash-body{background:linear-gradient(135deg,#020617,#0c1631,#0f1d3d);min-height:calc(100vh - 72px);padding:24px 32px 40px;position:relative;overflow:hidden;}
+.dash-body::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background-image:radial-gradient(circle at 20% 50%,rgba(56,189,248,.08),transparent 60%),radial-gradient(circle at 80% 80%,rgba(251,191,36,.06),transparent 60%);pointer-events:none;}
+
+.dash-detail-bar{display:flex;align-items:center;justify-content:flex-end;margin-bottom:18px;position:relative;z-index:1;}
+
+.dash-stats-row{display:grid;grid-template-columns:repeat(7,1fr);gap:14px;margin-bottom:20px;position:relative;z-index:1;}
+.dash-stat-card{background:rgba(15,29,61,.6);backdrop-filter:blur(12px);border:1px solid rgba(56,189,248,.2);border-radius:12px;padding:18px 20px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
+.dash-stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0;}
+.dash-stat-card:nth-child(1)::before{background:linear-gradient(90deg,#38bdf8,#0ea5e9);}
+.dash-stat-card:nth-child(2)::before{background:linear-gradient(90deg,#22c55e,#16a34a);}
+.dash-stat-card:nth-child(3)::before{background:linear-gradient(90deg,#fbbf24,#f59e0b);}
+.dash-stat-card:nth-child(4)::before{background:linear-gradient(90deg,#ef4444,#dc2626);}
+.dash-stat-card:nth-child(5)::before{background:linear-gradient(90deg,#a855f7,#8b5cf6);}
+.dash-stat-card:nth-child(6)::before{background:linear-gradient(90deg,#06b6d4,#0891b2);}
+.dash-stat-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(56,189,248,.15);border-color:rgba(56,189,248,.4);}
+.dash-stat-card .stat-icon{font-size:22px;margin-bottom:8px;}
+.dash-stat-card .stat-val{font-size:32px;font-weight:800;color:#f8fafc;line-height:1;letter-spacing:1px;}
+.dash-stat-card .stat-lbl{font-size:13px;color:#94a3b8;margin-top:6px;font-weight:600;}
+.dash-stat-card .stat-bar{height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:10px;overflow:hidden;}
+.dash-stat-card .stat-bar-fill{height:100%;border-radius:2px;transition:width .6s ease;}
+
+.dash-charts-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;position:relative;z-index:1;}
+.dash-charts-row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;position:relative;z-index:1;}
+.dash-chart-card{background:rgba(15,29,61,.6);backdrop-filter:blur(12px);border:1px solid rgba(56,189,248,.15);border-radius:12px;padding:20px;position:relative;overflow:hidden;}
+.dash-chart-card h3{font-size:15px;font-weight:700;color:#e2e8f0;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.dash-chart-card h3 .icon{font-size:16px;}
+.dash-chart-card .chart-sub{font-size:12px;color:#64748b;font-weight:400;margin-left:auto;}
+
+.dash-pie-wrap{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;}
+.dash-pie-legend{display:flex;flex-direction:column;gap:10px;}
+.dash-pie-legend-item{display:flex;align-items:center;gap:8px;font-size:13px;color:#cbd5e1;font-weight:600;}
+.dash-pie-legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+.dash-pie-legend-val{margin-left:auto;color:#94a3b8;font-size:12px;}
+
+.dash-bar-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.dash-bar-label{width:70px;font-size:13px;color:#cbd5e1;font-weight:600;text-align:right;flex-shrink:0;}
+.dash-bar-track{flex:1;height:24px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden;position:relative;}
+.dash-bar-fill{height:100%;border-radius:6px;transition:width .6s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:12px;font-weight:700;color:#fff;min-width:30px;}
+.dash-bar-val{width:60px;font-size:13px;color:#f8fafc;font-weight:700;text-align:left;flex-shrink:0;}
+
+.dash-owner-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.dash-owner-row:last-child{border-bottom:none;}
+.dash-owner-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
+.dash-owner-name{font-size:14px;color:#e2e8f0;font-weight:600;min-width:60px;}
+.dash-owner-bar{flex:1;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;}
+.dash-owner-fill{height:100%;border-radius:4px;transition:width .6s ease;}
+.dash-owner-count{font-size:13px;color:#94a3b8;font-weight:700;min-width:30px;text-align:right;}
+
+.dash-todo-list{max-height:260px;overflow-y:auto;}
+.dash-todo-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.04);margin-bottom:6px;transition:all .2s;cursor:pointer;}
+.dash-todo-item:hover{background:rgba(255,255,255,.08);}
+.dash-todo-item .priority-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dash-todo-item .td-title{flex:1;font-size:13px;color:#e2e8f0;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.dash-todo-item .td-deadline{font-size:12px;color:#64748b;font-weight:600;}
+.dash-todo-item .td-deadline.urgent{color:#fbbf24;}
+.dash-todo-item .td-deadline.overdue{color:#ef4444;}
+
+@media(max-width:1200px){
+  .dash-stats-row{grid-template-columns:repeat(4,1fr);}
+  .dash-charts-row{grid-template-columns:1fr;}
+  .dash-charts-row2{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .dash-stats-row{grid-template-columns:repeat(2,1fr);}
+  .dash-header{padding:14px 16px;}
+  .dash-body{padding:16px;}
+}
 </style>
 </head>
 <body>
+
+<!-- ========== Dashboard View ========== -->
+<div class="dash-view active" id="dashView">
+  <div class="dash-header">
+    <h1><span class="logo" id="dashHeaderLogo" onclick="openSettings()">📊</span><span id="dashHeaderTitle">数智运营事业部项目看板</span></h1>
+    <div class="dash-actions">
+      <span id="dashCloudStatus" style="font-size:11px;color:#86efac;display:flex;align-items:center;gap:3px;">☁ 已同步</span>
+      <button class="dash-btn dash-btn-ghost" onclick="forceCloudRefresh()">🔄 刷新</button>
+      <div class="dash-user" id="dashUserArea">
+        <button class="dash-btn dash-btn-ghost" id="dashLoginBtn" onclick="showLoginModal()">登录</button>
+        <div id="dashUserInfo" style="display:none;align-items:center;gap:10px;">
+          <span class="uname" id="dashUserName"></span>
+          <button class="dash-btn dash-btn-ghost" onclick="showKanban();openUserPanel()" style="display:none" id="dashUserMgmt">👤</button>
+          <button class="dash-btn dash-btn-ghost" onclick="doLogout()">退出</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="dash-body" id="dashBody">
+    <div class="dash-detail-bar">
+      <button class="dash-btn dash-btn-primary" onclick="showKanban()">📋 点击查看项目详细信息</button>
+    </div>
+    <div class="dash-stats-row" id="dashStatsRow"></div>
+    <div class="dash-charts-row" id="dashChartsRow"></div>
+    <div class="dash-charts-row2" id="dashChartsRow2"></div>
+  </div>
+</div>
+
+<!-- ========== Kanban View ========== -->
+<div class="kanban-view" id="kanbanView">
 
 <!-- Left edge trigger for Todo Module -->
 <div class="todo-edge-trigger" id="todoEdgeTrigger" onclick="openTodoModule()">
@@ -462,6 +579,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 <div class="header" id="mainHeader">
   <h1><span class="logo" id="headerLogo" onclick="openSettings()">📊</span><span id="headerTitle">数智运营事业部项目看板</span></h1>
   <div class="header-actions">
+    <button class="btn btn-ghost btn-sm" onclick="showDashboard()" title="返回驾驶舱">📊 驾驶舱</button>
     <button class="header-customize" onclick="openSettings()" title="个性化设置">⚙</button>
     <span id="cloudStatus" style="font-size:11px;color:#86efac;display:flex;align-items:center;gap:3px;" title="数据已同步至云端">☁ 已同步</span>
     <button class="btn btn-ghost btn-sm" onclick="forceCloudRefresh()" title="从云端刷新数据">🔄 刷新</button>
@@ -491,6 +609,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   <div class="filter-group"><label>优先级</label><select id="filterPriority" onchange="renderBoard()"><option value="">全部</option><option value="high">高</option><option value="medium">中</option><option value="low">低</option></select></div>
   <div class="filter-group"><label>截止日期</label><input type="date" id="filterDeadline" onchange="renderBoard()" style="width:145px;"></div>
   <div class="filter-group"><label>状态</label><select id="filterStatus" onchange="renderBoard()"><option value="">全部</option><option value="talk">前期环节</option><option value="bid">投标环节</option><option value="proc">采购环节</option><option value="impl">实施环节</option></select></div>
+  <div class="filter-group"><label>归档</label><select id="filterArchive" onchange="renderBoard()"><option value="active">流程中</option><option value="archived">归档中</option><option value="all">全部</option></select></div>
   <button class="clear-filter" onclick="clearFilters()">清除筛选</button>
   <div class="filter-stats"><span>共 <b id="statTotal">0</b> 项</span><span class="warn-count">⚠ 预警 <b id="statWarn">0</b></span><span class="decide-count">⚑ 待决策 <b id="statDecide">0</b></span></div>
 </div>
@@ -501,6 +620,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   <div class="column" data-status="proc"><div class="column-header" style="position:relative"><span>采购环节</span><div class="col-actions"><button class="col-sort-btn" title="排序" onclick="toggleSort('proc')">↕</button><button class="col-del-btn" title="批量删除" onclick="toggleColDelMenu('proc')">🗑</button><span class="count" id="count-proc">0</span></div><div class="col-del-dropdown" id="delMenu-proc"><button onclick="deleteSingleInCol('proc')">选择单个任务删除</button><button class="del-all" onclick="deleteAllInCol('proc')">全选删除本列全部</button></div></div><div class="column-body" data-status="proc" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)"></div></div>
   <div class="column" data-status="impl"><div class="column-header" style="position:relative"><span>实施环节</span><div class="col-actions"><button class="col-sort-btn" title="排序" onclick="toggleSort('impl')">↕</button><button class="col-del-btn" title="批量删除" onclick="toggleColDelMenu('impl')">🗑</button><span class="count" id="count-impl">0</span></div><div class="col-del-dropdown" id="delMenu-impl"><button onclick="deleteSingleInCol('impl')">选择单个任务删除</button><button class="del-all" onclick="deleteAllInCol('impl')">全选删除本列全部</button></div></div><div class="column-body" data-status="impl" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)"></div></div>
 </div>
+
+</div><!-- end kanban-view -->
 
 <!-- Task modal -->
 <div class="modal-overlay" id="taskModal">
@@ -674,7 +795,7 @@ const IMPL_SUBS_PATH1 = ['项目交付','项目初验','项目终验','初验不
 const IMPL_SUBS_PATH2 = ['财务开票','财务回款','财务列收'];
 const STATUS_MAP = {
   talk:{name:'前期环节',subs:['采购意向','采购需求','采购预告','商机录入','项目报名']},
-  bid:{name:'投标环节',subs:['标前评审','标书编写','标书审核','标书装订/上传','已中标，流程中','收入合同签订','落标归档','归档结束']},
+  bid:{name:'投标环节',subs:['标前评审','标书编写','标书审核','标书装订/上传','成功中标','收入合同签订','落标归档','归档结束']},
   proc:{name:'采购环节',subs:['采购需求','采购方案','现场开标','采购结果','支出合同签订','流标','项目终止']},
   impl:{name:'实施环节'}
 };
@@ -685,6 +806,11 @@ const PRIORITY_KEYS = {'高':'high','中':'medium','低':'low'};
 const STATUS_ORDER = ['talk','bid','proc','impl'];
 const STATUS_COLORS = {talk:'#6366f1',bid:'#f59e0b',proc:'#3b82f6',impl:'#ef4444'};
 const WARN_DAYS = 3;
+const ARCHIVE_SUBS = ['落标归档','归档结束','流标','项目终止'];
+function isArchivedTask(t){
+  if(t.status==='impl') return false;
+  return ARCHIVE_SUBS.includes(t.subStatus);
+}
 
 const XLS_FIELDS = [
   {key:'projectId',label:'项目编号'},{key:'projectName',label:'项目名称'},
@@ -775,12 +901,24 @@ const SORT_CYCLES = ['default','asc','desc'];
 function loadTasks(){
   // Load from localStorage as cache (will be overwritten by cloud data)
   try{tasks=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch(e){tasks=[];}
+  // Migrate legacy sub-status "已中标，流程中" → "成功中标"
+  let migrated=false;
+  tasks.forEach(t=>{
+    if(t.subStatus==='已中标，流程中'){t.subStatus='成功中标';migrated=true;}
+  });
+  if(migrated){localStorage.setItem(STORAGE_KEY,JSON.stringify(tasks));}
 }
 async function cloudLoadTasks(){
   const data = await cloudFetch('tasks');
   if (data !== null && data !== undefined) {
     tasks = data;
+    // Migrate legacy sub-status "已中标，流程中" → "成功中标"
+    let migrated=false;
+    tasks.forEach(t=>{
+      if(t.subStatus==='已中标，流程中'){t.subStatus='成功中标';migrated=true;}
+    });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    if(migrated){cloudSave('tasks',tasks);}
   }
 }
 function saveTasks(){
@@ -959,7 +1097,7 @@ function renderCard(task,cardIdx){
   } else {
     // Sub-status color maps
     const talkColorMap = {'采购意向':'background:#ede9fe;color:#6d28d9','采购需求':'background:#dbeafe;color:#1d4ed8','采购预告':'background:#d1fae5;color:#047857','商机录入':'background:#fef3c7;color:#b45309','项目报名':'background:#fce7f3;color:#be185d'};
-    const bidColorMap = {'标前评审':'background:#fef3c7;color:#92400e','标书编写':'background:#fef9c3;color:#a16207','标书审核':'background:#fef9c3;color:#a16207','标书装订/上传':'background:#fef9c3;color:#a16207','已中标，流程中':'background:#d1fae5;color:#047857','收入合同签订':'background:#d1fae5;color:#047857','落标归档':'background:#fee2e2;color:#991b1b','归档结束':'background:#f1f5f9;color:#64748b'};
+    const bidColorMap = {'标前评审':'background:#fef3c7;color:#92400e','标书编写':'background:#fef9c3;color:#a16207','标书审核':'background:#fef9c3;color:#a16207','标书装订/上传':'background:#fef9c3;color:#a16207','成功中标':'background:#d1fae5;color:#047857','收入合同签订':'background:#d1fae5;color:#047857','落标归档':'background:#fee2e2;color:#991b1b','归档结束':'background:#f1f5f9;color:#64748b'};
     const procColorMap = {'采购需求':'background:#dbeafe;color:#1d4ed8','采购方案':'background:#dbeafe;color:#1d4ed8','现场开标':'background:#dbeafe;color:#1d4ed8','采购结果':'background:#d1fae5;color:#047857','支出合同签订':'background:#d1fae5;color:#047857','流标':'background:#fee2e2;color:#991b1b','项目终止':'background:#f1f5f9;color:#64748b'};
     const colorMaps = {talk:talkColorMap,bid:bidColorMap,proc:procColorMap};
     const colorMap = colorMaps[task.status];
@@ -972,11 +1110,13 @@ function renderCard(task,cardIdx){
   let badges = subBadges;
   if(task.projectInfo?.confirmType) badges += `<span class="badge" style="background:#e0f2fe;color:#0369a1;font-size:11px;">确收：${esc(task.projectInfo.confirmType)}</span>`;
   badges += `<span class="badge badge-priority-${task.priority}">${PRIORITY_NAMES[task.priority]}</span>`;
-  if(warn) badges += `<span class="badge badge-warn">剩余处理期限：${daysLeft}天</span>`;
-  if(overdue) badges += `<span class="badge badge-overdue">已逾期 ${Math.abs(daysLeft)}天</span>`;
-  if(task.needDecision) badges += `<span class="badge badge-decide">⚑ 待决策</span>`;
-  const deadlineClass = (warn||overdue)?'urgent':'';
-  const deadlineText = overdue?`逾期${Math.abs(daysLeft)}天`:warn?`剩余${daysLeft}天`:fmtDate(task.deadline);
+  // Archived/terminated tasks no longer need deadline warnings
+  const isArchived = isArchivedTask(task);
+  if(warn&&!isArchived) badges += `<span class="badge badge-warn">剩余处理期限：${daysLeft}天</span>`;
+  if(overdue&&!isArchived) badges += `<span class="badge badge-overdue">已逾期 ${Math.abs(daysLeft)}天</span>`;
+  if(task.needDecision&&!isArchived) badges += `<span class="badge badge-decide">⚑ 待决策</span>`;
+  const deadlineClass = (warn||overdue)&&!isArchived?'urgent':'';
+  const deadlineText = !isArchived?(overdue?`逾期${Math.abs(daysLeft)}天`:warn?`剩余${daysLeft}天`:fmtDate(task.deadline)):fmtDate(task.deadline);
   const latestM = task.milestones&&task.milestones.length?task.milestones[task.milestones.length-1]:null;
   const mHtml = latestM?`<div class="milestone-latest">◆ ${latestM.date} ${esc(latestM.text)}</div>`:'';
   return `<div class="card" data-priority="${task.priority}" draggable="true" onclick="openDetail('${task.id}')" ondragstart="handleDragStart(event,'${task.id}')" ondragend="handleDragEnd(event)">
@@ -992,7 +1132,7 @@ function renderCard(task,cardIdx){
       <span class="owner"><span class="avatar">${(task.owner||'?').charAt(0)}</span>${esc(task.owner)}</span>
       ${task.contact?`<span class="owner" style=\"margin-left:8px\"><span class="avatar" style=\"background:#8b5cf6\">${task.contact.charAt(0)}</span>${esc(task.contact)}</span>`:''}
       <span style="flex:1"></span>
-      ${`<span class="countdown-pill ${overdue?'countdown-overdue':daysLeft<=3?'countdown-danger':daysLeft<=7?'countdown-urgent':'countdown-ok'}"><b>${Math.abs(daysLeft)}</b><small>${overdue?'天逾期':'天'}</small></span>`}
+      ${!isArchived?`<span class="countdown-pill ${overdue?'countdown-overdue':daysLeft<=3?'countdown-danger':daysLeft<=7?'countdown-urgent':'countdown-ok'}"><b>${Math.abs(daysLeft)}</b><small>${overdue?'天逾期':'天'}</small></span>`:''}
       <span class="deadline ${deadlineClass}">📅 ${deadlineText}</span>
     </div>
     ${mHtml}
@@ -1008,16 +1148,24 @@ function getFilteredTasks(){
   const p=document.getElementById('filterPriority').value;
   const dl=document.getElementById('filterDeadline').value;
   const st=document.getElementById('filterStatus').value;
+  const archiveFilter=document.getElementById('filterArchive')?.value||'active';
   if(s) r=r.filter(t=>t.title.toLowerCase().includes(s)||(t.desc||'').toLowerCase().includes(s));
   if(o) r=r.filter(t=>t.owner===o);
   if(p) r=r.filter(t=>t.priority===p);
   if(dl) r=r.filter(t=>t.deadline===dl);
   if(st) r=r.filter(t=>t.status===st);
+  if(archiveFilter==='active') r=r.filter(t=>!isArchivedTask(t));
+  else if(archiveFilter==='archived') r=r.filter(t=>isArchivedTask(t));
   r.sort((a,b)=>new Date(a.deadline)-new Date(b.deadline));
   return r;
 }
-function clearFilters(){document.getElementById('searchInput').value='';document.getElementById('filterOwner').value='';document.getElementById('filterPriority').value='';document.getElementById('filterDeadline').value='';document.getElementById('filterStatus').value='';renderBoard();}
-function updateStats(){document.getElementById('statTotal').textContent=tasks.length;document.getElementById('statWarn').textContent=tasks.filter(t=>isWarn(t)||isOverdue(t)).length;document.getElementById('statDecide').textContent=tasks.filter(t=>t.needDecision).length;}
+function clearFilters(){document.getElementById('searchInput').value='';document.getElementById('filterOwner').value='';document.getElementById('filterPriority').value='';document.getElementById('filterDeadline').value='';document.getElementById('filterStatus').value='';const fa=document.getElementById('filterArchive');if(fa) fa.value='active';renderBoard();}
+function updateStats(){
+  const fr=getFilteredTasks();
+  document.getElementById('statTotal').textContent=fr.length;
+  document.getElementById('statWarn').textContent=fr.filter(t=>!isArchivedTask(t)&&(isWarn(t)||isOverdue(t))).length;
+  document.getElementById('statDecide').textContent=fr.filter(t=>!isArchivedTask(t)&&t.needDecision).length;
+}
 
 // ========== Drag ==========
 let draggedId=null;
@@ -1669,6 +1817,8 @@ function applySettingsToUI(){
   }
   document.getElementById('headerTitle').textContent=settings.title;
   document.getElementById('headerLogo').textContent=settings.icon;
+  document.getElementById('dashHeaderTitle').textContent=settings.title;
+  document.getElementById('dashHeaderLogo').textContent=settings.icon;
   document.title=settings.title;
 }
 
@@ -1851,6 +2001,7 @@ function doLogin(){
   localStorage.setItem(SESSION_KEY,JSON.stringify({username:user.username}));
   closeLoginModal();
   updateHeaderUser();
+  renderDashboard();
   addLog('登录','用户 '+username+' 登录系统');
   showToast('欢迎回来，'+username);
   // Show todo reminder after login
@@ -1864,6 +2015,7 @@ function doLogout(){
   currentUser=null;
   localStorage.removeItem(SESSION_KEY);
   updateHeaderUser();
+  renderDashboard();
   updateTodoEdgeTrigger();
   showToast('已退出登录');
 }
@@ -2038,11 +2190,215 @@ document.getElementById('logPanel').addEventListener('click',e=>{if(e.target.id=
 // Force refresh from cloud
 async function forceCloudRefresh(){
   const statusEl = document.getElementById('cloudStatus');
-  statusEl.textContent = '☁ 同步中...'; statusEl.style.color = '#fbbf24';
+  const dashStatusEl = document.getElementById('dashCloudStatus');
+  if(statusEl){statusEl.textContent = '☁ 同步中...'; statusEl.style.color = '#fbbf24';}
+  if(dashStatusEl){dashStatusEl.textContent = '☁ 同步中...'; dashStatusEl.style.color = '#fbbf24';}
   await Promise.all([cloudLoadTasks(), cloudLoadSettings(), cloudLoadUsers(), cloudLoadLogs()]);
-  applySettingsToUI(); renderBoard();
-  statusEl.textContent = '☁ 已同步'; statusEl.style.color = '#86efac';
+  applySettingsToUI(); renderBoard(); renderDashboard();
+  if(statusEl){statusEl.textContent = '☁ 已同步'; statusEl.style.color = '#86efac';}
+  if(dashStatusEl){dashStatusEl.textContent = '☁ 已同步'; dashStatusEl.style.color = '#86efac';}
   showToast('云端数据已刷新');
+}
+
+// ========== Dashboard ==========
+let _currentView = 'dash'; // 'dash' or 'kanban'
+
+function showDashboard(){
+  _currentView='dash';
+  document.getElementById('dashView').classList.add('active');
+  document.getElementById('kanbanView').classList.remove('active');
+  renderDashboard();
+}
+function showKanban(){
+  _currentView='kanban';
+  document.getElementById('dashView').classList.remove('active');
+  document.getElementById('kanbanView').classList.add('active');
+  renderBoard();
+}
+
+function renderDashboard(){
+  const active = tasks.filter(t=>!isArchivedTask(t));
+  const archived = tasks.filter(t=>isArchivedTask(t));
+  const total = tasks.length;
+  const warnCount = active.filter(t=>isWarn(t)||isOverdue(t)).length;
+  const decideCount = active.filter(t=>t.needDecision).length;
+  
+  // Status distribution
+  const talkCount = active.filter(t=>t.status==='talk').length;
+  const bidCount = active.filter(t=>t.status==='bid').length;
+  const procCount = active.filter(t=>t.status==='proc').length;
+  const implCount = active.filter(t=>t.status==='impl').length;
+  
+  // Priority distribution
+  const highCount = active.filter(t=>t.priority==='high').length;
+  const medCount = active.filter(t=>t.priority==='medium').length;
+  const lowCount = active.filter(t=>t.priority==='low').length;
+  
+  // Owner distribution
+  const ownerMap = {};
+  active.forEach(t=>{
+    if(!t.owner) return;
+    if(!ownerMap[t.owner]) ownerMap[t.owner]=0;
+    ownerMap[t.owner]++;
+  });
+  const owners = Object.entries(ownerMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const maxOwnerCount = owners.length?Math.max(...owners.map(o=>o[1])):1;
+  
+  // Update user info on dashboard
+  const dashLoginBtn = document.getElementById('dashLoginBtn');
+  const dashUserInfo = document.getElementById('dashUserInfo');
+  const dashUserName = document.getElementById('dashUserName');
+  const dashUserMgmt = document.getElementById('dashUserMgmt');
+  if(currentUser){
+    if(dashLoginBtn) dashLoginBtn.style.display='none';
+    if(dashUserInfo) dashUserInfo.style.display='flex';
+    if(dashUserName) dashUserName.textContent = currentUser.username;
+    if(dashUserMgmt) dashUserMgmt.style.display = currentUser.role==='admin'?'inline-flex':'none';
+  } else {
+    if(dashLoginBtn) dashLoginBtn.style.display='inline-flex';
+    if(dashUserInfo) dashUserInfo.style.display='none';
+  }
+  
+  // Stats cards
+  const statsRow = document.getElementById('dashStatsRow');
+  const winRate = total>0?((tasks.filter(t=>t.subStatus==='成功中标'||t.subStatus==='收入合同签订').length/total)*100).toFixed(0):0;
+  // 项目总金额 = 采购环节(proc)项目金额 + 实施环节(impl)项目金额（单位：万元）
+  const totalAmt = tasks.filter(t=>t.status==='proc'||t.status==='impl')
+    .reduce((s,t)=>s+(parseFloat(t.projectAmt)||0),0);
+  const amtText = totalAmt>0 ? (totalAmt>=10000 ? (totalAmt/10000).toFixed(2)+'亿' : totalAmt.toFixed(2)+'万') : '0';
+  statsRow.innerHTML = [
+    {icon:'📋',val:total,lbl:'项目总数',barPct:100,color:'#38bdf8',link:null},
+    {icon:'💰',val:amtText,lbl:'项目总金额',barPct:total>0?100:0,color:'#f59e0b',link:null},
+    {icon:'🔄',val:active.length,lbl:'流程中',barPct:total>0?(active.length/total*100):0,color:'#22c55e',link:'active'},
+    {icon:'📦',val:archived.length,lbl:'已归档/终止',barPct:total>0?(archived.length/total*100):0,color:'#fbbf24',link:'archived'},
+    {icon:'⚠',val:warnCount,lbl:'预警/逾期',barPct:active.length>0?(warnCount/active.length*100):0,color:'#ef4444',link:'warn'},
+    {icon:'⚑',val:decideCount,lbl:'待决策',barPct:active.length>0?(decideCount/active.length*100):0,color:'#a855f7',link:'decide'},
+    {icon:'🏆',val:winRate+'%',lbl:'中标率',barPct:winRate,color:'#06b6d4',link:null},
+  ].map(c=>`<div class="dash-stat-card" ${c.link?`onclick="dashCardClick('${c.link}')"`:''}>
+    <div class="stat-icon">${c.icon}</div>
+    <div class="stat-val">${c.val}</div>
+    <div class="stat-lbl">${c.lbl}</div>
+    <div class="stat-bar"><div class="stat-bar-fill" style="width:${c.barPct}%;background:${c.color}"></div></div>
+  </div>`).join('');
+  
+  // Charts row 1: Status pie | Priority bars | Owner bars
+  const chartsRow = document.getElementById('dashChartsRow');
+  // Status pie chart (SVG donut)
+  const statusData = [
+    {label:'前期环节',val:talkCount,color:'#6366f1'},
+    {label:'投标环节',val:bidCount,color:'#f59e0b'},
+    {label:'采购环节',val:procCount,color:'#3b82f6'},
+    {label:'实施环节',val:implCount,color:'#ef4444'},
+  ];
+  const statusTotal = statusData.reduce((s,d)=>s+d.val,0);
+  let pieSegments = '';
+  let cumAngle = -90;
+  statusData.forEach(d=>{
+    if(d.val===0) return;
+    const pct = d.val/statusTotal;
+    const angle = pct*360;
+    const startAngle = cumAngle;
+    const endAngle = cumAngle+angle;
+    const r = 70, cx=90, cy=90;
+    const x1=cx+r*Math.cos(startAngle*Math.PI/180);
+    const y1=cy+r*Math.sin(startAngle*Math.PI/180);
+    const x2=cx+r*Math.cos(endAngle*Math.PI/180);
+    const y2=cy+r*Math.sin(endAngle*Math.PI/180);
+    const largeArc = angle>180?1:0;
+    pieSegments += `<path d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z" fill="${d.color}" opacity="0.85"/>`;
+    cumAngle = endAngle;
+  });
+  const pieLegend = statusData.map(d=>`<div class="dash-pie-legend-item"><span class="dash-pie-legend-dot" style="background:${d.color}"></span>${d.label}<span class="dash-pie-legend-val">${d.val}</span></div>`).join('');
+  
+  // Priority bars
+  const maxPriority = Math.max(highCount,medCount,lowCount,1);
+  const priorityBars = [
+    {label:'高',val:highCount,color:'#ef4444'},
+    {label:'中',val:medCount,color:'#f59e0b'},
+    {label:'低',val:lowCount,color:'#22c55e'},
+  ].map(d=>`<div class="dash-bar-row"><div class="dash-bar-label">${d.label}</div><div class="dash-bar-track"><div class="dash-bar-fill" style="width:${d.val/maxPriority*100}%;background:${d.color}">${d.val>0?d.val:''}</div></div></div>`).join('');
+  
+  // Owner bars
+  const ownerBars = owners.map(o=>{
+    const initials = o[0].slice(0,2);
+    const colors = ['#38bdf8','#fbbf24','#ef4444','#22c55e','#a855f7','#06b6d4','#f97316','#6366f1'];
+    const color = colors[owners.indexOf(o)%colors.length];
+    return `<div class="dash-owner-row"><div class="dash-owner-avatar" style="background:${color}">${esc(initials)}</div><div class="dash-owner-name">${esc(o[0])}</div><div class="dash-owner-bar"><div class="dash-owner-fill" style="width:${o[1]/maxOwnerCount*100}%;background:${color}"></div></div><div class="dash-owner-count">${o[1]}</div></div>`;
+  }).join('');
+  if(!ownerBars) ownerBars = '<div style="text-align:center;color:#64748b;padding:20px;font-size:13px;">暂无创建人数据</div>';
+  
+  chartsRow.innerHTML = `
+    <div class="dash-chart-card">
+      <h3><span class="icon">饼</span>环节分布<span class="chart-sub">流程中 ${active.length} 项</span></h3>
+      <div class="dash-pie-wrap">
+        ${statusTotal>0?`<svg width="180" height="180" viewBox="0 0 180 180"><circle cx="90" cy="90" r="70" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="2"/>${pieSegments}<circle cx="90" cy="90" r="48" fill="rgba(15,29,61,.8)"/><text x="90" y="86" text-anchor="middle" fill="#f8fafc" font-size="24" font-weight="800">${active.length}</text><text x="90" y="104" text-anchor="middle" fill="#94a3b8" font-size="11">流程中</text></svg>`:`<div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;color:#475569;font-size:13px;">暂无数据</div>`}
+        <div class="dash-pie-legend">${pieLegend}</div>
+      </div>
+    </div>
+    <div class="dash-chart-card">
+      <h3><span class="icon">📊</span>优先级分布<span class="chart-sub">流程中 ${active.length} 项</span></h3>
+      ${priorityBars}
+    </div>
+    <div class="dash-chart-card">
+      <h3><span class="icon">👥</span>创建人排名<span class="chart-sub">TOP 8</span></h3>
+      ${ownerBars}
+    </div>
+  `;
+  
+  // Charts row 2: Sub-status distribution | Todo reminders
+  const subStatusMap = {};
+  active.forEach(t=>{
+    let ss = t.status==='impl'?(t.implSub1||'项目交付'):(t.subStatus||'未指定');
+    if(!subStatusMap[ss]) subStatusMap[ss]=0;
+    subStatusMap[ss]++;
+  });
+  const subStatuses = Object.entries(subStatusMap).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const maxSubCount = subStatuses.length?Math.max(...subStatuses.map(s=>s[1])):1;
+  const subStatusBars = subStatuses.map(s=>{
+    const isAbnormal = ARCHIVE_SUBS.includes(s[0]) || s[0].includes('不通过');
+    const color = isAbnormal?'#ef4444':'#38bdf8';
+    return `<div class="dash-bar-row"><div class="dash-bar-label" style="width:90px;font-size:12px">${esc(s[0])}</div><div class="dash-bar-track"><div class="dash-bar-fill" style="width:${s[1]/maxSubCount*100}%;background:${color}">${s[1]>0?s[1]:''}</div></div></div>`;
+  }).join('');
+  if(!subStatusBars) subStatusBars = '<div style="text-align:center;color:#64748b;padding:20px;font-size:13px;">暂无数据</div>';
+  
+  // Todo reminders (from active tasks with deadlines approaching)
+  const todoItems = active.filter(t=>{
+    const d=getDaysLeft(t.deadline);
+    return d<=WARN_DAYS;
+  }).sort((a,b)=>new Date(a.deadline)-new Date(b.deadline)).slice(0,8);
+  const todoHtml = todoItems.map(t=>{
+    const d=getDaysLeft(t.deadline);
+    const overdue=d<0;
+    const urgent=!overdue&&d<=WARN_DAYS;
+    const dotColor = t.priority==='high'?'#ef4444':t.priority==='medium'?'#f59e0b':'#22c55e';
+    const dlClass = overdue?'overdue':urgent?'urgent':'';
+    const dlText = overdue?`逾期${Math.abs(d)}天`:`剩${d}天`;
+    return `<div class="dash-todo-item" onclick="openDetail('${t.id}')"><span class="priority-dot" style="background:${dotColor}"></span><span class="td-title">${esc(t.title)}</span><span class="td-deadline ${dlClass}">${dlText}</span></div>`;
+  }).join('');
+  
+  document.getElementById('dashChartsRow2').innerHTML = `
+    <div class="dash-chart-card">
+      <h3><span class="icon">📍</span>子状态分布<span class="chart-sub">流程中 TOP 10</span></h3>
+      ${subStatusBars}
+    </div>
+    <div class="dash-chart-card">
+      <h3><span class="icon">🔔</span>近期待办<span class="chart-sub">${todoItems.length} 项需关注</span></h3>
+      <div class="dash-todo-list">${todoHtml||'<div style="text-align:center;color:#64748b;padding:20px;font-size:13px;">暂无紧急待办 🎉</div>'}</div>
+    </div>
+  `;
+}
+
+function dashCardClick(type){
+  if(type==='active'||type==='archived'){
+    showKanban();
+    const fa=document.getElementById('filterArchive');
+    if(fa) fa.value=type==='active'?'active':'archived';
+    renderBoard();
+  } else if(type==='warn'){
+    showKanban();
+  } else if(type==='decide'){
+    showKanban();
+  }
 }
 
 // ========== Init ==========
@@ -2059,12 +2415,13 @@ async function forceCloudRefresh(){
   }
   updateHeaderUser(); // ensure UI reflects login state
 })();
-loadSettings();applySettingsToUI();loadTasks();renderBoard();
+loadSettings();applySettingsToUI();loadTasks();renderBoard();renderDashboard();
 // Cloud sync: load latest data from Supabase, then re-render
 (async function(){
   await Promise.all([cloudLoadTasks(), cloudLoadSettings(), cloudLoadUsers(), cloudLoadLogs()]);
   applySettingsToUI();
   renderBoard();
+  renderDashboard();
   loadTodos();
   showTodoReminder();
   updateTodoEdgeTrigger();
@@ -2077,6 +2434,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeTaskModal();cl
 setInterval(async()=>{
   await cloudLoadTasks();
   renderBoard();
+  renderDashboard();
 },60000);
 
 // ========== Todo Module ==========
